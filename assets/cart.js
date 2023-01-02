@@ -20,20 +20,23 @@ class CartItems extends HTMLElement {
     this.currentItemCount = Array.from(this.querySelectorAll('[name="updates[]"]'))
       .reduce((total, quantityInput) => total + parseInt(quantityInput.value), 0);
 
-    this.debouncedOnChange = debounce((event) => {
+    const debouncedOnChange = debounce((event) => {
       this.onChange(event);
-    }, 300);
+    }, ON_CHANGE_DEBOUNCE_TIMER);
 
-    this.addEventListener('change', this.debouncedOnChange.bind(this));
+    this.addEventListener('change', debouncedOnChange.bind(this));
   }
 
+  cartUpdateUnsubscriber = undefined;
+
   connectedCallback() {
-    subscribe('cart-update', this.onPropagate.bind(this))
+    this.cartUpdateUnsubscriber = subscribe('cart-update', this.onPropagate.bind(this))
   }
 
   disconnectedCallback() {
-    const sub = subscribe('cart-update', this.onPropagate.bind(this));
-    sub.unsubscribe()
+    if (this.cartUpdateUnsubscriber) {
+      this.cartUpdateUnsubscriber();
+    }
   }
 
   onChange(event) {
@@ -48,6 +51,7 @@ class CartItems extends HTMLElement {
         const html = new DOMParser().parseFromString(responseText, 'text/html')
         const sourceQty = html.querySelector('cart-items')
         this.innerHTML = sourceQty.innerHTML
+        console.log(sourceQty.innerHTML)
       })
       .catch(e => {
         console.error(e);
@@ -188,7 +192,7 @@ if (!customElements.get('cart-note')) {
       this.addEventListener('change', debounce((event) => {
         const body = JSON.stringify({ note: event.target.value });
         fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } });
-      }, 300))
+      }, ON_CHANGE_DEBOUNCE_TIMER))
     }
   });
 };
