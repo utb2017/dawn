@@ -51,18 +51,19 @@ if (!customElements.get('product-info')) {
         const html = new DOMParser().parseFromString(responseText, 'text/html')
         const sourceQty = html.querySelector((`[data-variantid~="${this.currentVariant.value}"]`))
         if (sourceQty) {
-          const valueQtyCart = sourceQty.value
+          const valueQtyCart = sourceQty.value;
+          const quantityRulesCartClassname = '.quantity__rules-cart';
           if (valueQtyCart > 0) {
-            this.querySelector('.quantity__rules-cart').classList.remove('hidden')
+            this.querySelector(quantityRulesCartClassname).classList.remove('hidden')
           } else {
-            this.querySelector('.quantity__rules-cart').classList.add('hidden')
+            this.querySelector(quantityRulesCartClassname).classList.add('hidden')
           }
           if (valueQtyCart && this.input) this.input.dataset.cartquantity = valueQtyCart;
           if (valueQtyCart && this.input) this.destinationQty.innerHTML = valueQtyCart;
         } else {
           if (this.input) this.input.dataset.cartquantity = 0;
           this.destinationQty.innerHTML = 0;
-          this.querySelector('.quantity__rules-cart').classList.add('hidden')
+          this.querySelector(quantityRulesCartClassname).classList.add('hidden')
         }
         this.fetchQtyRules();
       })

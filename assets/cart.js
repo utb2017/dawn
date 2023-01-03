@@ -30,7 +30,7 @@ class CartItems extends HTMLElement {
   cartUpdateUnsubscriber = undefined;
 
   connectedCallback() {
-    this.cartUpdateUnsubscriber = subscribe('cart-update', this.onPropagate.bind(this))
+    this.cartUpdateUnsubscriber = subscribe('cart-update', this.onCartUpdate.bind(this))
   }
 
   disconnectedCallback() {
@@ -43,15 +43,14 @@ class CartItems extends HTMLElement {
     this.updateQuantity(event.target.dataset.index, event.target.value, document.activeElement.getAttribute('name'));
   }
 
-  onPropagate() {
+  onCartUpdate() {
     if (this.tagName === 'CART-ITEMS') {
       fetch("/cart?section_id=main-cart-items")
       .then((response) => response.text())
       .then((responseText) => {
         const html = new DOMParser().parseFromString(responseText, 'text/html')
         const sourceQty = html.querySelector('cart-items')
-        this.innerHTML = sourceQty.innerHTML
-        console.log(sourceQty.innerHTML)
+        this.innerHTML = sourceQty.innerHTML;
       })
       .catch(e => {
         console.error(e);
