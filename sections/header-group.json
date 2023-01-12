@@ -4,6 +4,20 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
+      "blocks": {
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store",
+            "text_alignment": "center",
+            "color_scheme": "background-1",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement-bar-0"
+      ],
       "settings": {
       }
     },
@@ -14,7 +28,6 @@
         "logo_position": "middle-left",
         "menu": "main-menu",
         "menu_type_desktop": "dropdown",
-        "sticky_header_type": "on-scroll-up",
         "show_line_separator": true,
         "mobile_logo_position": "center",
         "margin_bottom": 0,
@@ -28,4 +41,3 @@
     "header"
   ]
 }
->>>>>>> aaa4ff473936f2a38c84d53bbf4e7c665625fdb8
